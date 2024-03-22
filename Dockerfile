@@ -29,7 +29,13 @@ RUN make
 
 # hadolint ignore=DL3006
 FROM gcr.io/distroless/cc-debian11
+# COPY --from=busybox:1.35.0-uclibc /bin/sh /bin/sh
+
 WORKDIR /
 COPY --from=build /go/bin/fleet-telemetry /
+
+COPY test/integration/test-certs/ /etc/tesla/certs/server/ 
+COPY test/integration/config.json /etc/tesla/
+COPY test/integration/config.json /etc/fleet-telemetry/
 
 CMD ["/fleet-telemetry", "-config", "/etc/fleet-telemetry/config.json"]
